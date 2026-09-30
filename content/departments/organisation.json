@@ -1,0 +1,142 @@
+{
+  "id": "organisation",
+  "intro": {
+    "zh": "组织部堪称学联里\n最会玩、最能造、最有战斗力的\n神仙部门！",
+    "en": "Big ideas. Unforgettable events. A team that makes things happen."
+  },
+  "responsibilities": {
+    "zh": "我们是活动的总设计师，也是现场的硬核执行者，从灵感构思💭到完美落地，每一场精彩活动的背后，都有组织部的全力以赴🏃‍♂️🏃‍♀️\n\n从超嗨的Welcome Party，\n到燃爆全场的体育竞赛🏸🏀\n\n大大小小的校园活动，\n全由我们一手策划、落地、炸场！",
+    "en": "We design MCSA events and bring them to life. From the first spark of an idea to delivery on the day, the Organisation Department puts its energy into every experience.\n\nFrom lively Welcome Parties to action-packed badminton and basketball competitions, we plan and deliver campus events of every size."
+  },
+  "dailyWork": {
+    "zh": "哪里有活动，哪里就有组织部的身影！\n\n我们永远冲在第一线，\n用热爱点燃现场，用创意点亮每一个篇章",
+    "en": "Wherever there is an event, you will find our team.\n\nWe work at the heart of the action, bringing energy to each event and creativity to every stage."
+  },
+  "recruitment": {
+    "zh": "在这里，你可以尽情释放脑洞，把奇思妙想变成现实；在这里，你能锻炼统筹能力、沟通技巧、执行思维，收获满满技能与成长；更能遇见一群靠谱、热血、同频共振的伙伴，一起并肩作战，收获珍贵友谊。\n\n舞台已就位，热爱不缺席，\n组织部，只等你来一起造🫵",
+    "en": "Bring your ideas to life while developing your planning, communication and delivery skills. Work alongside dependable, enthusiastic teammates, learn together and build lasting friendships.\n\nThe stage is set. Join the Organisation Department and help create what comes next."
+  },
+  "groups": [
+    {
+      "name": {
+        "zh": "策划组",
+        "en": "Planning team"
+      },
+      "text": {
+        "zh": "在组织部\n每一天都是创意与执行的碰撞💥\n\n策划组的日常从头脑风暴开始🌪️\n一场活动的雏形\n诞生于无数个灵感的碰撞之中\n大家围坐在一起激发想象\n讨论出最具吸引力的活动形式🌟\n\n确定方向后\n策划方案随即展开\n从流程设计到预算计算\n每一个细节都需要精细推敲🤔\n\n与此同时\n部门间的沟通同步也紧锣密鼓地进行着\n协调资源、对接宣传、联络合作方\n活动稳步推进🔛\n\n等到活动临近\n策划组成员更是全程紧盯进度\n时刻调整方案，确保活动能够如期落地✅",
+        "en": "Every day brings creativity and delivery together.\n\nThe planning team starts with brainstorming, sharing ideas and shaping an event people will want to attend.\n\nOnce the direction is agreed, the team develops the programme and budget, working through the details.\n\nMembers coordinate resources, publicity and partners across departments. As the event approaches, they track progress and adjust the plan to keep delivery on schedule."
+      },
+      "requirements": [
+        {
+          "zh": "负责活动创意构思、策划方案撰写",
+          "en": "Develop event concepts and write proposals."
+        },
+        {
+          "zh": "统筹资源分配，把控整体活动流程与进度",
+          "en": "Coordinate resources and manage the event programme and timeline."
+        },
+        {
+          "zh": "对接各部门协作，推动项目从方案到落地",
+          "en": "Work across departments to turn plans into delivered events."
+        },
+        {
+          "zh": "对活动效果与呈现质量负责",
+          "en": "Take responsibility for event outcomes and presentation quality."
+        }
+      ]
+    },
+    {
+      "name": {
+        "zh": "执行组",
+        "en": "Event delivery team"
+      },
+      "text": {
+        "zh": "执行组的日常\n则是让这些精心策划的创意真正变为现实\n\n从活动前期的彩排，到场地布置\n每个环节都需要执行组成员精准把控📈\n\n活动现场，大家分工明确\n有人负责迎接嘉宾，有人调试设备\n有人维持秩序\n紧张而有序地确保每一个环节顺利进行✊🏻\n\n如果遇到突发状况\n更需要执行组临危不乱\n迅速反应，保障活动的顺利✔️\n\n当灯光熄灭、掌声响起👏🏻\n看着自己亲手打造的活动圆满落幕\n那种成就感无可比拟🥳",
+        "en": "The delivery team turns carefully planned ideas into real experiences.\n\nFrom rehearsals to venue setup, members coordinate every step. On the day, they welcome guests, check equipment and keep the event running smoothly.\n\nWhen something unexpected happens, the team stays calm and responds quickly.\n\nSeeing an event you helped create come together is a reward like no other."
+      },
+      "requirements": [
+        {
+          "zh": "负责活动现场统筹与执行，保障流程顺畅",
+          "en": "Coordinate delivery on site and keep the programme running smoothly."
+        },
+        {
+          "zh": "参与彩排筹备，配合负责人完成各项工作",
+          "en": "Help prepare rehearsals and support the team leads."
+        },
+        {
+          "zh": "临场应变，及时处理突发状况",
+          "en": "Respond quickly to unexpected situations on the day."
+        }
+      ]
+    }
+  ],
+  "leadership": [
+    {
+      "name": "汪晓雅 Jasmine",
+      "role": {
+        "zh": "部长",
+        "en": "Head of Department"
+      },
+      "quote": {
+        "zh": "欢迎来到组织部的“乌托邦”！在这里，拒绝千篇一律，鼓励脑洞大开。愿大家把奇思妙想✨落地，把枯燥工作干成艺术品！",
+        "en": "Welcome to our Organisation Department utopia! We welcome fresh thinking and bold ideas. Let’s turn imagination into reality and everyday work into something creative."
+      },
+      "image": "images/departments/organisation/jasmine-original.png"
+    },
+    {
+      "name": "刘星烨 Vivian",
+      "role": {
+        "zh": "对外副部长",
+        "en": "Deputy Head · External Affairs"
+      },
+      "quote": {
+        "zh": "揣好细心和热情，咱们一起把工作‘织’得顺顺当当，把团队‘聚’得暖暖和和～",
+        "en": "Bring your care and enthusiasm. Together, let’s keep our work running smoothly and make this a warm, welcoming team."
+      },
+      "image": "images/departments/organisation/vivian-original.jpg"
+    },
+    {
+      "name": "Jocelyn 钱语涵",
+      "role": {
+        "zh": "对内副部长",
+        "en": "Deputy Head · Internal Affairs"
+      },
+      "quote": {
+        "zh": "祝大家在新的一年里勇往直前，捧着梦走遍天涯！",
+        "en": "Wishing you the courage to move forward in the year ahead and follow your dreams wherever they take you!",
+        "hant": "祝大家在新的一年裡勇往直前，捧著夢走遍天涯！"
+      },
+      "image": "images/departments/organisation/jocelyn.jpg"
+    }
+  ],
+  "source": {
+    "type": "user-provided WeChat screenshots and text",
+    "term": null,
+    "translationStatus": "English draft; Traditional Chinese pending conversion"
+  },
+  "recruitmentUrl": "https://mp.weixin.qq.com/s/tOxhxiIIGJkB7bnaVxp71w",
+  "recruitmentStatus": {
+    "zh": "往期招新 · 2026年2月26日–3月15日（墨尔本时间）。本轮报名已结束；后续安排请关注官方微信公众号。",
+    "en": "Past recruitment round · 26 February–15 March 2026 (Melbourne time). Applications for this round have closed. Follow the official WeChat account for future announcements."
+  },
+  "interview": {
+    "zh": "部长将根据简历与面试表现进行分组。\n• 个人简历\n• 一份策划案（策划组）\n• 满格的热情与想象力",
+    "en": "Team allocation is based on your CV and interview. Prepare:\n• Your CV\n• An event proposal (for the planning team)\n• Plenty of enthusiasm and imagination"
+  },
+  "benefits": {
+    "zh": "🌟 实战\n从策划到落地，亲手见证一场活动从0到1的蜕变，你的创意，直接说了算👍\n\n🌟 福利\n学联内部资源＋商家专属折扣，吃喝玩乐一条龙，快乐与实惠全都要\n\n🌟 人脉\n遇见各专业大神、优秀学长学姐，朋友圈直接升级，未来一路开挂💯",
+    "en": "Hands-on experience\nHelp build an event from the first idea to delivery and see your creativity make a difference.\n\nMember benefits\nAccess association resources and partner discounts described in the recruitment article.\n\nConnections\nMeet students across disciplines and learn from experienced peers."
+  },
+  "applicationNote": {
+    "zh": "原文报名方式：添加MCSA小助手，发送“组织部”获取后续面试信息。每人最多报名两个部门。以下二维码来自已结束的招新轮次。",
+    "en": "The original article instructed applicants to add an MCSA assistant on WeChat and send “组织部” for interview information. Applicants could apply to at most two departments. The QR codes below belong to that closed recruitment round."
+  },
+  "applicationImage": "images/departments/organisation/recruitment-source.png",
+  "articleLayout": true,
+  "poster": "images/departments/organisation/recruitment-poster.webp",
+  "gallery": [
+    "images/departments/organisation/basketball-group.png",
+    "images/departments/organisation/indoor-group.png",
+    "images/departments/organisation/outdoor-group.png"
+  ]
+}

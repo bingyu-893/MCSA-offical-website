@@ -78,7 +78,9 @@
     } [k] || label(k)) : label(k)
   }
 
-  // Navigation and department cards deliberately share the same department URL.
+  // Department navigation opens internal pages; recruitment URLs belong inside them.
+  const departmentRoute = department => 'department-' + encodeURIComponent(department.id) + '.html';
+
   function nav() {
     const primaryLinks = ['about', 'latest-events', 'campus-info', 'past-review']
       .map(key => a(route(key), esc(navLabel(key)), page === key ? 'active' : ''))
@@ -86,11 +88,9 @@
     const secondaryLinks = ['presidents', 'discounts', 'sponsors']
       .map(key => a(route(key), esc(navLabel(key)), page === key ? 'active' : ''))
       .join('');
-    const departmentLinks = data.departments.map(department => {
+    const departmentLinks = data.departments.filter(department => department.published !== false).map(department => {
       const name = esc(t(department.name));
-      return department.url ?
-        a(department.url, name) :
-        `<span class="nav-disabled">${name}</span>`;
+      return a(departmentRoute(department), name);
     }).join('');
     const languageOptions = [
         ['zh', '简体中文'],
@@ -195,7 +195,7 @@
       about: () => `<section class="section" id="about">${heading(label('about'))}<div class="prose">${paragraphs(data.pages.about.paragraphs)}</div>${postGridOptional('about')}</section>`,
       events: () => `<section class="section" id="events">${linkedHeading(label('latest-events'),'latest-events.html')}${postGrid('latest-events',3)}</section>`,
       presidents: carousel,
-      departments: () => `<section class="section" id="departments">${linkedHeading(ui('部门介绍','Departments','部門介紹'),'recruitment.html',paragraphs([data.settings.departmentHint]))}${departments()}</section>`
+      departments: () => `<section class="section" id="departments">${heading(ui('部门介绍','Departments','部門介紹'),paragraphs([data.settings.departmentHint]))}${departments()}</section>`
     };
     return data.homeSections.filter(section => section.visible)
       .map(section => sections[section.id]?.() || '').join('') + postGridOptional('home');
@@ -206,7 +206,7 @@
   }
 
   function recruitment() {
-    return `<section class="section" id="departments">${heading(label('recruitment'),paragraphs(data.pages.recruitment.paragraphs))}${departments()}</section>${postGridOptional('recruitment')}`;
+    return `<section class="section" id="departments"><header class="page-heading"><h1>${esc(label('recruitment'))}</h1><div class="prose">${paragraphs(data.pages.recruitment.paragraphs)}</div></header>${departments()}</section>${postGridOptional('recruitment')}`;
   }
 
   function eventCarousel() {
@@ -240,10 +240,63 @@
  }).join('')}</div>`;
   }
 
+  function departmentPage() {
+    const department = data.departments.find(d => 'department-' + d.id === page && d.published !== false);
+    if (!department) return `<header class="page-heading"><h1>${ui('此部门暂未发布','Department unavailable','此部門暫未發佈')}</h1></header>${a('recruitment.html',ui('查看其他部门','Browse departments','查看其他部門'),'button')}`;
+    const pending = ui('内容即将更新。','Details will be added soon.','內容即將更新。');
+    const copy = value => `<p>${esc(t(value) || pending)}</p>`;
+    const section = (title, value) => `<section class="department-panel"><h2>${title}</h2>${copy(value)}</section>`;
+    let recruitmentUrl = '';
+    try {
+      const candidate = new URL(department.recruitmentUrl || department.url || '');
+      if (candidate.protocol === 'https:' && candidate.hostname === 'mp.weixin.qq.com' && !candidate.username && !candidate.password) recruitmentUrl = candidate.href;
+    } catch {}
+    if (department.articleLayout) {
+      const photo = (src, alt) => `<figure class="article-photo">${image(src,alt,null,'article-original')}</figure>`;
+      const story = value => `<div class="article-story">${t(value).split(/\n\n+/).filter(Boolean).map((block,i)=>`<div class="story-step"><span class="story-number" aria-hidden="true">${String(i+1).padStart(2,'0')}</span><p>${esc(block)}</p></div>`).join('')}</div>`;
+      const title = text => `<h2 class="article-section-title">${text}</h2>`;
+      const gallery = department.gallery || [];
+      const introLines = t(department.intro).split('\n');
+      const aboutIntro = lang === 'zh' ? `<div class="about-manifesto"><p class="about-eyebrow">${esc(introLines[0])}</p><div class="about-traits"><span>最会玩</span><span>最能造</span><span>最有战斗力</span></div><p class="about-punchline">${esc(introLines.slice(2).join(' '))}</p></div>` : `<div class="about-manifesto"><p class="about-punchline">${esc(t(department.intro))}</p></div>`;
+      const responsibilityBlocks = t(department.responsibilities).split(/\n\n+/).filter(Boolean);
+      const aboutResponsibilities = `<div class="about-narrative">${responsibilityBlocks.map((text,index) => `<div class="about-beat about-beat-${index}"><span class="about-beat-symbol" aria-hidden="true">${['✦','↗','⚡'][index % 3]}</span><p>${esc(text)}</p></div>`).join('')}</div>`;
+
+      const leaders = (department.leadership || []).map(leader => `<figure class="article-leader"><figcaption><p class="leader-role">${esc(t(leader.role))}</p><h3>${esc(t(leader.name))}</h3></figcaption>${leader.image ? (leader.crop ? image(leader.image,t(leader.name),leader.crop,'department-portrait') : photo(leader.image,t(leader.name))) : `<div class="department-photo-pending">${ui('照片即将更新','Photo coming soon','照片即將更新')}</div>`}${t(leader.quote) ? `<blockquote>${esc(t(leader.quote))}</blockquote>` : ''}</figure>`).join('');
+      const groups = (department.groups || []).map(group => `<section class="article-subsection"><h3>${esc(t(group.name))}</h3>${story(group.text)}</section>`).join('');
+      const requirements = (department.groups || []).map(group => `<section class="article-subsection"><h3>${esc(t(group.name))}</h3><ul>${(group.requirements || []).map(item => `<li>${esc(t(item))}</li>`).join('')}</ul></section>`).join('');
+      return `<article class="department-article">
+        <nav class="department-breadcrumb" aria-label="${ui('面包屑导航','Breadcrumb','麵包屑導航')}">${a('recruitment.html',ui('所有部门','All departments','所有部門'))} / ${esc(t(department.name))}</nav>
+        <header class="article-heading"><span class="article-kicker">MCSA · EVENT TEAM</span><h1>${esc(t(department.name))}</h1><p class="recruitment-status">${esc(t(department.recruitmentStatus))}</p></header>
+        ${photo(department.poster,ui('组织部招新海报（往期）','Organisation Department recruitment poster (past round)','組織部招新海報（往期）'))}
+        <section class="article-section article-about" id="department-about">${title(ui('关于我们','About us','關於我們'))}${aboutIntro}${aboutResponsibilities}${photo(gallery[0],ui('篮球活动合照','Basketball event group photo','籃球活動合照'))}${copy(t(department.recruitment).split('\n\n')[0])}${copy(department.dailyWork)}${copy(t(department.recruitment).split('\n\n').slice(1).join('\n\n'))}${photo(gallery[1],ui('室内活动合照','Indoor group photo','室內活動合照'))}<p class="article-divider">Daily life</p>${photo(gallery[2],ui('户外合照','Outdoor group photo','戶外合照'))}</section>
+        <section class="article-section">${title(ui('部长寄语','Messages from the Department Leaders','部長寄語'))}${leaders}</section>
+        <section class="article-section">${title(ui('部门核心小组','Our core teams','部門核心小組'))}${groups}</section>
+        <section class="article-section">${title(ui('岗位要求','Role requirements','崗位要求'))}${requirements}${title(ui('面试准备','Interview preparation','面試準備'))}${copy(department.interview)}</section>
+        <section class="article-section">${title(ui('福利待遇','What you can gain','福利待遇'))}${story(department.benefits)}</section>
+        <section class="article-section">${title(ui('往期报名方式','Past application instructions','往期報名方式'))}<p class="recruitment-status">${esc(t(department.recruitmentStatus))}</p>${copy(department.applicationNote)}${photo(department.applicationImage,ui('往期招新二维码及报名说明','Past recruitment QR codes and application instructions','往期招新二維碼及報名說明'))}${recruitmentUrl ? a(recruitmentUrl,ui('查看微信招新推文','Read the WeChat recruitment post','查看微信招新推文')+' ↗','button primary') : ''}</section>
+        </article>`;
+    }
+    const groups = (department.groups || []).map(group => `<article class="department-panel"><h3>${esc(t(group.name))}</h3>${copy(group.text)}${group.requirements?.length ? `<h4>${ui('岗位要求','Role requirements','崗位要求')}</h4><ul>${group.requirements.map(item => `<li>${esc(t(item))}</li>`).join('')}</ul>` : ''}</article>`).join('');
+    const leaders = (department.leadership || []).map(leader => `<figure class="department-leader">${image(leader.image,t(leader.name),leader.crop,'department-portrait')}<figcaption><p class="leader-role">${esc(t(leader.role))}</p><h3>${esc(t(leader.name))}</h3><blockquote>${esc(t(leader.quote))}</blockquote></figcaption></figure>`).join('');
+    const heads = (Array.isArray(department.heads) ? department.heads : []).slice().sort((a,b) => String(b.termStart || '').localeCompare(String(a.termStart || '')));
+    return `<nav class="department-breadcrumb" aria-label="${ui('面包屑导航','Breadcrumb','麵包屑導航')}">${a('recruitment.html',ui('所有部门','All departments','所有部門'))} / ${esc(t(department.name))}</nav>
+      <header class="department-hero"><span class="eyebrow">MCSA · ${ui('我们的团队','OUR TEAMS','我們的團隊')}</span><h1>${esc(t(department.name))}</h1>${copy(department.intro)}${image(department.image,t(department.name),null,'department-photo')}</header>
+      <div class="department-content-grid">${section(ui('部门职责','Responsibilities','部門職責'),department.responsibilities || department.intro)}${section(ui('日常工作','What we do','日常工作'),department.dailyWork)}</div>
+      ${groups ? `<section aria-labelledby="department-groups"><h2 id="department-groups">${ui('部门核心小组','Our core teams','部門核心小組')}</h2><div class="department-content-grid department-groups">${groups}</div></section>` : ''}
+      ${leaders ? `<section aria-labelledby="department-leaders"><h2 id="department-leaders">${ui('部长寄语','Messages from the Department Leaders','部長寄語')}</h2><div class="department-leaders">${leaders}</div></section>` : ''}
+      <section class="department-panel department-recruitment"><h2>${ui('加入我们','Join the team','加入我們')}</h2>${department.recruitmentStatus ? `<p class="recruitment-status">${esc(t(department.recruitmentStatus))}</p>` : ''}${copy(department.recruitment)}${recruitmentUrl ? a(recruitmentUrl,ui('查看微信招新推文','Read the WeChat recruitment post','查看微信招新推文')+' ↗','button primary') : `<p class="department-note">${ui('招新推文链接待公布。','The recruitment article link will be announced here.','招新推文連結待公佈。')}</p>`}</section>
+      ${department.interview ? section(ui('面试准备','Interview preparation','面試準備'),department.interview) : ''}
+      ${department.benefits ? section(ui('福利待遇','What you can gain','福利待遇'),department.benefits) : ''}
+      ${department.applicationNote ? `<details class="department-panel"><summary>${ui('查看往期报名方式','View past application instructions','查看往期報名方式')}</summary>${copy(department.applicationNote)}${image(department.applicationImage,ui('往期招新二维码及报名说明','Past recruitment QR codes and application instructions','往期招新二維碼及報名說明'),null,'department-application-image')}</details>` : ''}
+      ${section(ui('部门历史','Our history','部門歷史'),department.history)}
+      <section class="department-panel"><h2>${ui('历任部长','Department heads through the years','歷任部長')}</h2>${heads.length ? `<ol class="department-heads">${heads.map(head => `<li><span>${esc(t(head.term) || head.termStart)}</span><strong>${esc(t(head.name))}</strong></li>`).join('')}</ol>` : `<p>${pending}</p>`}</section>`;
+  }
+
   function content() {
     if (page === 'home') return home();
     if (page === 'admin') return '<div id="admin-root"></div>';
     if (page === 'recruitment') return recruitment();
+    if (page.startsWith('department-')) return departmentPage();
     if (page === 'article') {
       const post = data.posts.find(p => p.id === new URLSearchParams(location.search).get('id') && p.published);
       return post ? `<header class="page-heading"><h1>${esc(t(post.title))}</h1></header><article class="article-detail">${image(post.image,t(post.title),post.crop)}<div class="prose">${paragraphs([post.text])}</div>${post.url?a(post.url,ui('阅读原文', 'Read original', '閱讀原文'),'button'):''}</article>` : `<p class="empty-state">${ui('这篇内容暂未发布。', 'This article is not available.', '這篇內容暫未發佈。')}</p>`;
@@ -284,7 +337,7 @@
       en: 'en',
       hant: 'zh-Hant'
     } [lang];
-    document.title = (page === 'admin' ? ui('内容管理', 'Content management', '內容管理') : page.startsWith('department-') ? t(data.departments.find(d => 'department-' + d.id === page).name) : label(page)).replace(/\n/g, ' ') + ' | MCSA';
+    document.title = (page === 'admin' ? ui('内容管理', 'Content management', '內容管理') : page.startsWith('department-') ? t(data.departments.find(d => 'department-' + d.id === page && d.published !== false)?.name) || ui('部门','Department','部門') : label(page)).replace(/\n/g, ' ') + ' | MCSA';
     document.querySelector('#app').innerHTML = nav() + `<main id="main" class="container">${content()}</main>${page==='admin'?'':`<div class="container">${contacts()}</div>`}<footer class="footer"><div class="container"><nav class="footer-links">${data.footerLinks.map(link=>a(link.url,esc(t(link.name)))).join('')}</nav><p>${esc(t(data.settings.footer))}</p></div></footer><button id="back-top" class="round" aria-label="${ui('返回顶部', 'Back to top', '返回頂部')}" title="${ui('返回顶部', 'Back to top', '返回頂部')}">↑</button>`;
     bind();
     bindCollections();
@@ -320,7 +373,25 @@
     }, data.layout.carouselSeconds * 1000)
   }
 
+  let articleObserver;
+  function animateArticle() {
+    articleObserver?.disconnect();
+    if (reducedMotion() || !('IntersectionObserver' in window)) return;
+    articleObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        if (!reducedMotion()) entry.target.animate?.([
+          {opacity: .65, transform: 'translateY(16px)'},
+          {opacity: 1, transform: 'translateY(0)'}
+        ], {duration: 500, easing: 'cubic-bezier(.2,.7,.2,1)'});
+        articleObserver.unobserve(entry.target);
+      });
+    }, {threshold: .08});
+    document.querySelectorAll('.department-article .article-section-title, .department-article .story-step, .department-article .article-leader, .department-article .about-beat, .department-article .about-manifesto').forEach(el => articleObserver.observe(el));
+  }
+
   function bind() {
+    animateArticle();
     document.querySelector('#language').onchange = e => {
       if (page === 'admin' && window.CMS?.dirty && !confirm(ui('切换语言会丢弃未保存修改，继续吗？', 'Discard unsaved edits to change language?', '切換語言會丟棄未保存修改，繼續嗎？'))) {
         e.target.value = lang;
