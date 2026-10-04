@@ -99,11 +99,7 @@
     const label = template.includes('{name}')
       ? template.replaceAll('{name}', name)
       : ui(`查看${name}详情`, `Explore ${name}`, `查看${name}詳情`);
-    // The navigation reads this same URL from the department record.
-    const detailLink = !department ? '' : department.url
-      ? a(department.url, esc(label) + ' →', 'button primary department-link')
-      : `<button class="button primary department-link" type="button" disabled
-          title="${ui('请在后台设置此部门的超链接','Add this department’s link in the CMS','請在後台設定此部門的超連結')}">${esc(label)} →</button>`;
+    const detailLink = !department ? '' : a('department-' + encodeURIComponent(department.id) + '.html', esc(label) + ' →', 'button primary department-link');
     return `
       <span class="detail-kicker">${department ? ui('部门详情','DEPARTMENT DETAIL','部門詳情') : ui('蒙纳士中国学生会','MCSA · OUR TEAMS','蒙納士中國學生會')}</span>
       <h3>${esc(t(department?.name || settings.departmentOverviewTitle))}</h3>
@@ -113,37 +109,13 @@
   }
 
   function departments(context) {
-    const {
-      data,
-      t,
-      ui,
-      esc
-    } = context;
-    const item = (department, duplicate) => `
-      <button class="department-choice" type="button" data-department="${esc(department.id)}"
-        ${duplicate ? 'tabindex="-1" aria-hidden="true"' : 'aria-pressed="false"'}>
-        <span class="department-choice-title">${esc(t(department.name))}</span>
-        <span class="department-choice-summary">${esc(t(department.keywords)).replace(/[|｜]/g,' · ')}</span>
-        <span class="department-choice-arrow" aria-hidden="true">→</span>
-      </button>`;
-    selectedDepartment = null;
-    return `
-      <div class="department-explorer">
-        <article class="department-detail" id="department-detail" aria-live="polite" aria-atomic="true">
-          ${departmentDetail(context,null)}
-        </article>
-        <div class="department-list-side">
-          <div class="department-scroll" tabindex="0" role="region" aria-label="${ui('部门列表，可拖动或滚动','Departments, drag or scroll','部門列表，可拖動或滾動')}">
-            <div class="department-track">
-              ${[-1,0,1].map(copy=>`<div class="department-copy" ${copy?'aria-hidden="true"':''}>${data.departments.map(d=>item(d,copy!==0)).join('')}</div>`).join('')}
-            </div>
-          </div>
-          <div class="department-list-controls">
-            <span>${ui('拖动列表，探索六个部门','Drag to explore our teams','拖動列表，探索六個部門')}</span>
-            <button class="department-pause" type="button" aria-pressed="false">${ui('暂停滚动','Pause scrolling','暫停滾動')}</button>
-          </div>
-        </div>
-      </div>`;
+    const {data,t,ui,esc,a} = context;
+    const departments = data.departments.filter(d => d.published !== false);
+    return `<div class="department-explorer department-directory">
+      <article class="department-detail">${departmentDetail(context,null)}</article>
+      <nav class="department-static-list" aria-label="${ui('部门列表','Departments','部門列表')}">
+        ${departments.length ? departments.map(d => a('department-' + encodeURIComponent(d.id) + '.html', `<span class="department-choice-title">${esc(t(d.name))}</span><span class="department-choice-summary">${esc(t(d.keywords)).replace(/[|｜]/g,' · ')}</span><span class="department-choice-arrow" aria-hidden="true">→</span>`, 'department-choice')).join('') : `<p>${ui('部门信息即将更新。','Department information will be added soon.','部門資訊即將更新。')}</p>`}
+      </nav></div>`;
   }
 
   function contacts(context) {
@@ -242,7 +214,7 @@
       viewport.querySelectorAll('[data-department]').forEach(button => {
         const active = button.dataset.department === id;
         button.classList.toggle('selected', active);
-        if (!button.hasAttribute('aria-hidden')) button.setAttribute('aria-pressed', String(active));
+        if (!button.hasAttribute('aria-hidden')) button.classList.toggle('selected', active);
       });
       nextAutoTime = performance.now() + 3500;
     }
