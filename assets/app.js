@@ -226,7 +226,7 @@
   }
 
   function merchantGrid() {
-    return `<div class="filters"><label>${ui('地区', 'Area', '地區')}<select id="region-filter"><option value="">${ui('全部地区', 'All areas', '全部地區')}</option>${data.regions.map(x=>`<option value="${esc(x.id)}">${esc(t(x.name))}</option>`).join('')}</select></label><label>${ui('种类', 'Category', '種類')}<select id="category-filter"><option value="">${ui('全部种类', 'All categories', '全部種類')}</option>${data.categories.map(x=>`<option value="${esc(x.id)}">${esc(t(x.name))}</option>`).join('')}</select></label></div><div class="post-grid merchants">${data.merchants.map(m=>`<article class="post-card" data-region="${esc(m.region)}" data-category="${esc(m.category)}">${m.url?a(m.url,`${image(m.image,t(m.name),null,'post-image')}<div class="post-body"><h3>${esc(t(m.name))}</h3><p>${esc(t(m.text))}</p></div>`):`${image(m.image,t(m.name),null,'post-image')}<div class="post-body"><h3>${esc(t(m.name))}</h3><p>${esc(t(m.text))}</p></div>`}</article>`).join('')}</div><p id="filter-empty" class="empty-state" ${data.merchants.length?'hidden':''}>${ui('暂无符合条件的商家。', 'No matching partners yet.', '暫無符合條件的商家。')}</p>`;
+    return `<section id="merchant-experience" aria-label="${esc(ui('折扣商家地图与列表', 'Partner map and list', '折扣商家地圖與列表'))}"></section>`;
   }
 
   function sponsorGrid() {
@@ -382,16 +382,6 @@
   }
 
   function bindCollections() {
-    document.querySelectorAll('.filters select').forEach(select => select.onchange = () => {
-      const region = document.querySelector('#region-filter').value;
-      const category = document.querySelector('#category-filter').value;
-      let count = 0;
-      document.querySelectorAll('.merchants .post-card').forEach(card => {
-        card.hidden = !!((region && card.dataset.region !== region) || (category && card.dataset.category !== category));
-        if (!card.hidden) count++;
-      });
-      document.querySelector('#filter-empty').hidden = count > 0;
-    });
     document.querySelectorAll('[data-member]').forEach(button => button.onclick = () => {
       const strip = button.closest('.term').querySelector('.member-strip');
       strip.scrollBy({
