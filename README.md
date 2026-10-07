@@ -54,3 +54,31 @@ New department IDs need matching static HTML routes. Current public imagery is s
 ## Validation
 
 Run `node tests/departments.cjs` and `node --check assets/app.js` / `node --check assets/home.js`. Tests cover unavailable records, date ordering, escaping, recruitment URL checks, article order, source assets, non-clickable photos and Jocelyn's approved message. Local browser checks covered Chinese/English rendering and navigation. Full production and mobile/accessibility acceptance remains pending.
+
+### Secretariat review and static export
+
+Edit `content/departments/secretariat.json` and `assets/secretariat.js` here first.
+The official route renders the `articleLayout: "secretariat"` department record
+from the published backend snapshot; this JSON is an import handoff, not an automatic
+runtime fallback. Import it into the backend departments collection and publish it
+after Hugo's approval. Existing API configuration requirements still apply.
+The record includes Simplified Chinese and draft English copy; Traditional Chinese
+currently falls back to Simplified Chinese and needs editorial review.
+
+The ten numbered files in `images/departments/secretariat/` are unmodified supplied
+originals in article order. `content/departments/secretariat-originals.json` records
+their SHA-256 hashes and sizes. The additional application-source image preserves
+the historical QR notice; recruitment dates and places are explicitly historical.
+
+Run from this checkout:
+
+```sh
+node tests/departments.cjs
+node tests/secretariat.cjs
+node scripts/export-secretariat.cjs ../MCSA-website-provisional-
+```
+
+The exporter updates only the Secretariat static articles, scoped styles, content
+record, manifest and images in the provisional checkout. It does not publish them.
+Push changes on feature branches in both repositories and submit draft PRs for
+Hugo's review. Do not merge or push main before approval.
