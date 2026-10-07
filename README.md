@@ -82,3 +82,26 @@ The exporter updates only the Secretariat static articles, scoped styles, conten
 record, manifest and images in the provisional checkout. It does not publish them.
 Push changes on feature branches in both repositories and submit draft PRs for
 Hugo's review. Do not merge or push main before approval.
+
+### Publicity department
+
+`content/departments/publicity.json` contains the supplied Publicity article and
+English translation, rendered by `assets/publicity.js` with the same article
+structure as Secretariat. Its department-specific styles use MCSA red and gold.
+Import the `articleLayout: "publicity"` record into the backend departments
+collection after review; the official route still uses the published snapshot.
+
+The original five numbered files are preserved separately under
+`images/departments/publicity/`, alongside four unchanged source screenshots for
+team examples and the past application notice. The source screenshots remain in
+expandable panels; their text is also represented as accessible HTML. Account
+statistics are labelled historical, and the February–March 2026 round is closed.
+`publicity-originals.json` records hashes for all nine supplied assets.
+Leadership records start with the supplied current team; no earlier terms are
+invented. English copy is a translation for review; Traditional Chinese currently
+falls back to Simplified Chinese.
+
+Run `node tests/publicity.cjs`, then
+`node scripts/export-publicity.cjs ../MCSA-website-provisional-` to update both
+static language pages and copy the originals without recompression. The export
+is local and does not push, merge or deploy. Hugo's draft-PR review remains required.
