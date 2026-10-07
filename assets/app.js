@@ -251,6 +251,7 @@
       const candidate = new URL(department.recruitmentUrl || department.url || '');
       if (candidate.protocol === 'https:' && candidate.hostname === 'mp.weixin.qq.com' && !candidate.username && !candidate.password) recruitmentUrl = candidate.href;
     } catch {}
+    if (department.articleLayout === 'publicity') return window.MCSAPublicity.render(department, lang);
     if (department.articleLayout === 'secretariat') return window.MCSASecretariat.render(department, lang);
     if (department.articleLayout) {
       const photo = (src, alt) => `<figure class="article-photo">${image(src,alt,null,'article-original')}</figure>`;
