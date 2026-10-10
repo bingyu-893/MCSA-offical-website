@@ -167,6 +167,13 @@ textarea {
   min-width: 0
 }
 
+.translation-notice { padding:10px 14px; border-left:3px solid #aa742b; background:#fff7e8; color:#62471e; font-size:.9rem; line-height:1.5; overflow-wrap:anywhere; }
+html[lang=en] .post-body, html[lang=en] .department-detail, html[lang=en] .policy-copy { overflow-wrap:anywhere; }
+html[lang=en] .button { white-space:normal; text-align:center; }
+html[lang=en] .filters { flex-wrap:wrap; }
+html[lang=en] .filters label { min-width:0; max-width:100%; }
+html[lang=en] .filters select { max-width:100%; }
+
 .brand>span {
   min-width: 0
 }
