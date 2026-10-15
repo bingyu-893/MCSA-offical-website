@@ -1,4 +1,4 @@
-// Local defaults. Run connect.py in the parent folder before production deployment.
+// Set apiBase to the backend URL ending in /api before deployment.
 window.MCSA_CONFIG = {
-  apiBase: "http://127.0.0.1:8000/api" //http://127.0.0.1:8000/api
+  apiBase: ""
 };
